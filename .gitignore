@@ -1,0 +1,7 @@
+.venv/
+.claude/*.local.*
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+__pycache__
+.tsk

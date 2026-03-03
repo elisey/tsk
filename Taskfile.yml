@@ -1,0 +1,24 @@
+version: '3'
+
+tasks:
+  format:
+    desc: Format code with ruff
+    cmds:
+      - uv run ruff format src tests
+
+  lint:
+    desc: Run linters (ruff check + mypy)
+    cmds:
+      - uv run ruff check src tests
+      - uv run mypy src
+
+  test:
+    desc: Run tests with pytest
+    cmds:
+      - uv run pytest
+
+  ci:
+    desc: Run all CI checks (lint + test)
+    cmds:
+      - task: lint
+      - task: test
