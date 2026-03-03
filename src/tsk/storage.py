@@ -12,13 +12,9 @@ from tsk.parser import parse_issues, serialize_issues
 class IssueNotFoundError(Exception):
     """Raised when an issue is not found."""
 
-    pass
-
 
 class DependencyError(Exception):
     """Raised when there's a dependency-related error."""
-
-    pass
 
 
 # Map status to filename

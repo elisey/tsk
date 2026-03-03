@@ -13,13 +13,9 @@ CLOSED_FILE = "closed.md"
 class TskNotFoundError(Exception):
     """Raised when .tsk/ directory is not found."""
 
-    pass
-
 
 class TskAlreadyExistsError(Exception):
     """Raised when .tsk/ directory already exists."""
-
-    pass
 
 
 def find_tsk_dir(start_path: Path | None = None) -> Path:
