@@ -34,7 +34,7 @@ tsk close 1
 | `tsk close <id> [<id>...]` | Close one or more issues |
 | `tsk dep add <id> <dep-id>` | Add dependency: id depends on dep-id |
 | `tsk dep remove <id> <dep-id>` | Remove a dependency |
-| `tsk help` | Show extended help with workflow |
+| `tsk workflow` | Show workflow guidance and best practices |
 
 ### Create Options
 

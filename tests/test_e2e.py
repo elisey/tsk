@@ -104,9 +104,9 @@ class TestE2EWorkflow:
         assert "not found" in result.stderr
         assert "tsk list" in result.stderr
 
-    def test_help_command(self, e2e_dir: Path) -> None:
-        """Test help command shows workflow."""
-        result = run_tsk(["help"], e2e_dir)
+    def test_workflow_command(self, e2e_dir: Path) -> None:
+        """Test workflow command shows guidance and best practices."""
+        result = run_tsk(["workflow"], e2e_dir)
         assert result.returncode == 0
         assert "WORKFLOW" in result.stdout
         assert "BEST PRACTICES" in result.stdout

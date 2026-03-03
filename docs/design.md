@@ -95,7 +95,7 @@ tsk dep remove <issue> <depends-on> # Убрать зависимость
 ### Справка
 ```bash
 tsk --help            # Стандартная справка Typer
-tsk help              # Расширенная справка с workflow и примерами (для инъекции в LLM контекст)
+tsk workflow          # Workflow guidance и best practices для LLM агентов
 ```
 
 ---
@@ -400,13 +400,12 @@ Hint: Run 'tsk list' to see all issues
 
 ---
 
-### Этап 19: tsk help
-- [ ] Команда `tsk help`
-- [ ] Расширенная справка с workflow
-- [ ] Примеры использования
+### Этап 19: tsk workflow
+- [ ] Команда `tsk workflow`
+- [ ] Workflow guidance с примерами
 - [ ] Best practices для LLM агентов
 
-**Проверка:** `tsk help` выводит полную инструкцию
+**Проверка:** `tsk workflow` выводит полную инструкцию
 
 ---
 

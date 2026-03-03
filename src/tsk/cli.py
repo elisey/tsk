@@ -317,18 +317,16 @@ def close(
         _handle_tsk_not_found()
 
 
-HELP_TEXT = """
+WORKFLOW_TEXT = """
 tsk - Issue Tracker for LLM Agents
 
 WORKFLOW:
-  1. Initialize: tsk init
-  2. Create issues: tsk create "title" [--priority=0|1|2] [--description="..."]
-  3. View ready work: tsk ready
-  4. Work on issue: tsk update <id> --status=in_progress
-  5. Complete issue: tsk close <id>
+  1. Create issues: tsk create "title" [--priority=0|1|2] [--description="..."]
+  2. View ready work: tsk ready
+  3. Work on issue: tsk update <id> --status=in_progress
+  4. Complete issue: tsk close <id>
 
 COMMANDS:
-  tsk init                    Create .tsk/ directory
   tsk create                  Create a new issue
   tsk list [--status=...]     List issues (todo|in_progress|closed|open)
   tsk ready                   Show unblocked issues ready to work on
@@ -355,18 +353,13 @@ BEST PRACTICES FOR LLM AGENTS:
   - Set issue to in_progress before starting work
   - Close issues when done to unblock dependent tasks
   - Use dependencies to enforce task ordering
-
-FILES:
-  .tsk/todo.md        - Issues not yet started
-  .tsk/in_progress.md - Issues being worked on
-  .tsk/closed.md      - Completed issues
 """.strip()
 
 
-@app.command("help")
-def help_command() -> None:
-    """Show extended help with workflow and examples."""
-    typer.echo(HELP_TEXT)
+@app.command("workflow")
+def workflow_command() -> None:
+    """Show workflow guidance and best practices."""
+    typer.echo(WORKFLOW_TEXT)
 
 
 def _is_blocked(issue: Issue, all_issues: dict[Status, list[Issue]]) -> bool:
