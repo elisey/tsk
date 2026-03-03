@@ -336,7 +336,9 @@ WORKFLOW:
   1. Create issues: tsk create "title" [--priority=0|1|2] [--description="..."]
   2. View ready work: tsk ready
   3. Work on issue: tsk update <id> --status=in_progress
-  4. Complete issue: tsk close <id>
+  4. Implemnt the task, validate
+  5. Commit the changes
+  6. Complete issue: tsk close <id>
 
 COMMANDS:
   tsk create                  Create a new issue
