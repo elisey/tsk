@@ -31,7 +31,36 @@ def _handle_tsk_not_found() -> None:
     """Handle TskNotFoundError consistently."""
     typer.echo("Error: No .tsk/ directory found", err=True)
     typer.echo("Hint: Run 'tsk init' to create one", err=True)
-    raise typer.Exit(1) from None
+    raise typer.Exit(1)
+
+
+def _handle_issue_not_found(issue_id: int) -> None:
+    """Handle IssueNotFoundError with issue ID."""
+    typer.echo(f"Error: Issue {issue_id} not found", err=True)
+    typer.echo("Hint: Run 'tsk list' to see all issues", err=True)
+    raise typer.Exit(1)
+
+
+def _handle_issue_not_found_exc(exc: IssueNotFoundError) -> None:
+    """Handle IssueNotFoundError from exception."""
+    typer.echo(f"Error: {exc}", err=True)
+    typer.echo("Hint: Run 'tsk list' to see all issues", err=True)
+    raise typer.Exit(1)
+
+
+def _handle_dependency_error(exc: DependencyError) -> None:
+    """Handle DependencyError consistently."""
+    typer.echo(f"Error: {exc}", err=True)
+    raise typer.Exit(1)
+
+
+def _validate_priority(priority: int) -> None:
+    """Validate priority value, exit with error if invalid."""
+    if priority not in (0, 1, 2):
+        typer.echo(
+            f"Error: Invalid priority {priority}. Must be 0, 1, or 2.", err=True
+        )
+        raise typer.Exit(1)
 
 
 def version_callback(value: bool) -> None:
@@ -72,12 +101,7 @@ def create(
 ) -> None:
     """Create a new issue."""
     try:
-        # Validate priority
-        if priority not in (0, 1, 2):
-            typer.echo(
-                f"Error: Invalid priority {priority}. Must be 0, 1, or 2.", err=True
-            )
-            raise typer.Exit(1) from None
+        _validate_priority(priority)
 
         issue_id = get_next_id()
         now = datetime.now()
@@ -144,7 +168,7 @@ def list_issues(
                 "Use: todo, in_progress, closed, open",
                 err=True,
             )
-            raise typer.Exit(1) from None
+            raise typer.Exit(1)
 
         if not issues_to_show:
             typer.echo("No tasks found")
@@ -201,9 +225,7 @@ def show(issue_id: int = typer.Argument(..., help="Issue ID to show")) -> None:
             typer.echo(f"Closed: {issue.closed_at.isoformat()}")
 
     except IssueNotFoundError:
-        typer.echo(f"Error: Issue {issue_id} not found", err=True)
-        typer.echo("Hint: Run 'tsk list' to see all issues", err=True)
-        raise typer.Exit(1) from None
+        _handle_issue_not_found(issue_id)
     except TskNotFoundError:
         _handle_tsk_not_found()
 
@@ -244,12 +266,7 @@ def update(
             updated_issue = replace(updated_issue, title=title)
 
         if priority is not None:
-            if priority not in (0, 1, 2):
-                typer.echo(
-                    f"Error: Invalid priority {priority}. Must be 0, 1, or 2.",
-                    err=True,
-                )
-                raise typer.Exit(1) from None
+            _validate_priority(priority)
             updated_issue = replace(updated_issue, priority=priority)
 
         if description is not None:
@@ -296,9 +313,7 @@ def update(
         save_issues(current_status, updated_list)
 
     except IssueNotFoundError:
-        typer.echo(f"Error: Issue {issue_id} not found", err=True)
-        typer.echo("Hint: Run 'tsk list' to see all issues", err=True)
-        raise typer.Exit(1) from None
+        _handle_issue_not_found(issue_id)
     except TskNotFoundError:
         _handle_tsk_not_found()
 
@@ -323,7 +338,7 @@ def close(
 
         if errors:
             typer.echo("Hint: Run 'tsk list' to see all issues", err=True)
-            raise typer.Exit(1) from None
+            raise typer.Exit(1)
 
     except TskNotFoundError:
         _handle_tsk_not_found()
@@ -365,6 +380,7 @@ STATUS VALUES:
 BEST PRACTICES FOR LLM AGENTS:
   - Use 'tsk ready' to find next task (respects dependencies)
   - Set issue to in_progress before starting work
+  - Commit the changes before closing the task
   - Close issues when done to unblock dependent tasks
   - Use dependencies to enforce task ordering
 """.strip()
@@ -421,12 +437,9 @@ def dep_add(
     try:
         add_dependency(issue_id, depends_on_id)
     except IssueNotFoundError as e:
-        typer.echo(f"Error: {e}", err=True)
-        typer.echo("Hint: Run 'tsk list' to see all issues", err=True)
-        raise typer.Exit(1) from None
+        _handle_issue_not_found_exc(e)
     except DependencyError as e:
-        typer.echo(f"Error: {e}", err=True)
-        raise typer.Exit(1) from None
+        _handle_dependency_error(e)
     except TskNotFoundError:
         _handle_tsk_not_found()
 
@@ -440,12 +453,9 @@ def dep_remove(
     try:
         remove_dependency(issue_id, depends_on_id)
     except IssueNotFoundError as e:
-        typer.echo(f"Error: {e}", err=True)
-        typer.echo("Hint: Run 'tsk list' to see all issues", err=True)
-        raise typer.Exit(1) from None
+        _handle_issue_not_found_exc(e)
     except DependencyError as e:
-        typer.echo(f"Error: {e}", err=True)
-        raise typer.Exit(1) from None
+        _handle_dependency_error(e)
     except TskNotFoundError:
         _handle_tsk_not_found()
 
