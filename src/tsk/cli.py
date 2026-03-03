@@ -1,5 +1,6 @@
 """tsk - Issue tracker for LLM agents."""
 
+from dataclasses import replace
 from datetime import datetime
 from typing import Annotated
 
@@ -237,8 +238,6 @@ def update(
         all_issues = load_all_issues()
 
         # Update fields
-        from dataclasses import replace
-
         updated_issue = issue
 
         if title is not None:
