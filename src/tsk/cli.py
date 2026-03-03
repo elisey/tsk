@@ -178,6 +178,19 @@ def show(issue_id: int = typer.Argument(..., help="Issue ID to show")) -> None:
                 except IssueNotFoundError:
                     typer.echo(f"  #{dep_id} [NOT FOUND]")
 
+        # Find reverse dependencies (issues blocked by this one)
+        all_issues = load_all_issues()
+        blocked_by_this = [
+            (other, st)
+            for st, issues in all_issues.items()
+            for other in issues
+            if issue_id in other.depends_on
+        ]
+        if blocked_by_this:
+            typer.echo("\nBlocked by this:")
+            for dep, st in blocked_by_this:
+                typer.echo(f"  #{dep.id} [{st.value}] {dep.title}")
+
         if issue.description:
             typer.echo(f"\nDescription:\n{issue.description}")
 
